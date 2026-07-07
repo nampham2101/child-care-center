@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | Sunny Days Child Care Center</title>
+  <meta name="description" content="Get in touch with Sunny Days Child Care Center to schedule a tour or ask a question.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav-bar" aria-label="Main navigation">
+      <a href="index.html" class="logo">Sunny Days</a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="programs.html">Programs</a></li>
+        <li><a href="tuition.html">Tuition</a></li>
+        <li><a href="contact.html" aria-current="page">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>Get in Touch</h1>
+        <p>We'd love to answer your questions or schedule a tour of our center.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="contact-heading">
+      <div class="container">
+        <div class="card-grid">
+          <div class="card">
+            <h2 id="contact-heading">Send Us a Message</h2>
+            <p class="form-note">This form is a placeholder and doesn't submit yet — it will be connected soon.</p>
+            <form class="form-grid" aria-describedby="form-status">
+              <div class="form-field">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" autocomplete="name" required>
+              </div>
+              <div class="form-field">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" autocomplete="email" required>
+              </div>
+              <div class="form-field">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" autocomplete="tel">
+              </div>
+              <div class="form-field">
+                <label for="child_age">Child's Age</label>
+                <input type="text" id="child_age" name="child_age" placeholder="e.g. 18 months">
+              </div>
+              <div class="form-field">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary" disabled>Send Message</button>
+              <p id="form-status" class="form-note">Sending isn't enabled yet — check back soon.</p>
+            </form>
+          </div>
+
+          <div class="card">
+            <h2>Visit or Call</h2>
+            <ul class="contact-info-list">
+              <li><strong>Address</strong><br>123 Main St, Anytown, ST 12345</li>
+              <li><strong>Phone</strong><br><a href="tel:+15551234567">(555) 123-4567</a></li>
+              <li><strong>Email</strong><br><a href="mailto:hello@sunnydayscc.example">hello@sunnydayscc.example</a></li>
+              <li><strong>Hours</strong><br>Monday–Friday, 6:30 AM – 6:00 PM</li>
+            </ul>
+            <div class="photo-placeholder" style="margin-top: 1.5rem;" role="img" aria-label="Placeholder map of center location">[Map Placeholder]</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4>Sunny Days Child Care Center</h4>
+          <p>123 Main St<br>Anytown, ST 12345</p>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <p>(555) 123-4567<br><a href="mailto:hello@sunnydayscc.example">hello@sunnydayscc.example</a></p>
+        </div>
+        <div>
+          <h4>Hours</h4>
+          <p>Mon–Fri: 6:30 AM – 6:00 PM</p>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <p>
+            <a href="about.html">About</a><br>
+            <a href="programs.html">Programs</a><br>
+            <a href="tuition.html">Tuition</a><br>
+            <a href="contact.html">Contact</a>
+          </p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Sunny Days Child Care Center. All information on this site is a placeholder pending real content.</p>
+        <p class="staff-login-link"><a href="admin/login.html">Staff Login</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="nav.js"></script>
+</body>
+</html>
