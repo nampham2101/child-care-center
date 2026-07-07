@@ -33,13 +33,14 @@ in Netlify's/Supabase's own dashboards and can't be done by Claude directly.
 redirected to login.
 **Depends on:** Stage 0 (Identity enabled).
 
-- [ ] `admin/login.html` — Netlify Identity widget, redirects to `admin/index.html`
-      once logged in
-- [ ] `admin/index.html` — checks for a valid Identity session on load; redirects to
-      `admin/login.html` if none
-- [ ] `admin/records.html` — same session check as above
+- [ ] `site/admin/login.html` — Netlify Identity widget, redirects to
+      `site/admin/index.html` once logged in
+- [ ] `site/admin/index.html` — checks for a valid Identity session on load;
+      redirects to `site/admin/login.html` if none
+- [ ] `site/admin/records.html` — same session check as above
 - [ ] Confirm none of the three admin pages are linked from the public site's main
-      nav (only the existing footer "Staff Login" link points here)
+      nav (only the existing footer "Staff Login" link points here — it already
+      resolves correctly to `admin/login.html` relative to the `site/` pages)
 
 ## Stage 3 — Netlify Functions
 
@@ -54,7 +55,7 @@ never reaches the browser.
 - [ ] Add `@netlify/functions` and `@supabase/supabase-js` as real dependencies in
       `package.json` (currently a placeholder with none)
 
-## Stage 4 — Dashboard UI (`admin/index.html`)
+## Stage 4 — Dashboard UI (`site/admin/index.html`)
 
 **Goal:** the admin can add an entry and see where the center stands financially.
 **Depends on:** Stage 3 (functions to call).
@@ -64,7 +65,7 @@ never reaches the browser.
 - [ ] Running totals: total income, total expenses, profit (income − expenses), from
       `get-entries`
 
-## Stage 5 — Records UI (`admin/records.html`)
+## Stage 5 — Records UI (`site/admin/records.html`)
 
 **Goal:** the admin can review and filter past entries.
 **Depends on:** Stage 3 (functions to call).
@@ -78,7 +79,7 @@ never reaches the browser.
 **Goal:** confirm the whole flow actually works, not just that the code compiles.
 **Depends on:** Stages 2–5.
 
-- [ ] Logged-out visit to any `admin/*` page redirects to login
+- [ ] Logged-out visit to any `site/admin/*` page redirects to login
 - [ ] Logging in as the invited admin reaches the dashboard
 - [ ] Adding an entry persists it in Supabase and updates the running totals
 - [ ] Records page filters (category, date range) return correct results
