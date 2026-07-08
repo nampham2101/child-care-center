@@ -1,0 +1,67 @@
+/* Sunny Days Admin Portal — minimal layout on top of ../styles.css */
+
+.admin-body {
+  background: var(--color-cream);
+  min-height: 100vh;
+}
+
+.admin-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: var(--color-white);
+  box-shadow: var(--shadow-soft);
+  flex-wrap: wrap;
+}
+
+.admin-topbar .logo {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--color-primary);
+  font-size: 1.25rem;
+  text-decoration: none;
+}
+
+.admin-nav {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.admin-nav a {
+  text-decoration: none;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.admin-nav a[aria-current="page"] {
+  color: var(--color-primary);
+}
+
+.admin-main {
+  padding: 2.5rem 1.5rem;
+}
+
+.placeholder-card {
+  color: var(--color-text-light);
+}
+
+.login-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.login-card {
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+}
+
+.login-card .btn {
+  margin-top: 1rem;
+}

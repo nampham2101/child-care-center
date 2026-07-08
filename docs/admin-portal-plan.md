@@ -44,14 +44,31 @@ expected "RLS enabled, no policy" state, not an error.
 redirected to login.
 **Depends on:** Stage 0 (Identity enabled).
 
-- [ ] `site/admin/login.html` — Netlify Identity widget, redirects to
+- [x] `site/admin/login.html` — Netlify Identity widget, redirects to
       `site/admin/index.html` once logged in
-- [ ] `site/admin/index.html` — checks for a valid Identity session on load;
+- [x] `site/admin/index.html` — checks for a valid Identity session on load;
       redirects to `site/admin/login.html` if none
-- [ ] `site/admin/records.html` — same session check as above
-- [ ] Confirm none of the three admin pages are linked from the public site's main
+- [x] `site/admin/records.html` — same session check as above
+- [x] Confirm none of the three admin pages are linked from the public site's main
       nav (only the existing footer "Staff Login" link points here — it already
       resolves correctly to `admin/login.html` relative to the `site/` pages)
+
+**Note:** all three pages share `site/admin/admin.css` (layout) and
+`site/admin/admin-auth.js` (the session-check/redirect/logout logic used by
+`index.html` and `records.html`); `login.html` inlines its own init/login
+listeners. The Identity widget is pointed at the real site
+(`https://child-carecenter.netlify.app/.netlify/identity`) via a `<link
+rel="identity.netlify.com">` tag in each page's `<head>`, so it resolves
+correctly even when testing from `localhost`.
+
+**Verification caveat:** the code follows Netlify's documented widget pattern
+(`on('init')` / `on('login')` / `on('logout')` + `init()`) exactly, and the pages
+render correctly with no console errors. However, the actual login round-trip
+(redirect-when-logged-out → widget login → redirect-to-dashboard) could **not**
+be confirmed in the sandboxed local preview browser — cross-origin cookies/iframes
+behave differently in headless automation than in a real browser. This needs a
+real click-through in an actual browser once deployed, which is Stage 6's job;
+don't treat Stage 2 as fully proven until that happens.
 
 ## Stage 3 — Netlify Functions
 

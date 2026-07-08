@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Login | Sunny Days Child Care Center</title>
+  <meta name="robots" content="noindex">
+  <link rel="identity.netlify.com" href="https://child-carecenter.netlify.app/.netlify/identity">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="admin.css">
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body class="admin-body">
+  <main class="login-wrap">
+    <div class="card login-card">
+      <h1>Staff Login</h1>
+      <p>Sign in to manage income &amp; expense records.</p>
+      <button id="login-btn" class="btn btn-primary" type="button">Log In</button>
+      <p class="form-note"><a href="../index.html">&larr; Back to site</a></p>
+    </div>
+  </main>
+
+  <script>
+    netlifyIdentity.on("init", function (user) {
+      if (user) {
+        window.location.href = "index.html";
+      }
+    });
+    netlifyIdentity.on("login", function () {
+      window.location.href = "index.html";
+    });
+    netlifyIdentity.init();
+
+    document.getElementById("login-btn").addEventListener("click", function () {
+      netlifyIdentity.open("login");
+    });
+  </script>
+</body>
+</html>
