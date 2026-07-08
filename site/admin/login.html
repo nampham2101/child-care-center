@@ -30,6 +30,9 @@
       }
     });
     netlifyIdentity.on("login", function () {
+      // Close the widget immediately so its "Logged in as ..." confirmation
+      // screen never renders before we redirect.
+      netlifyIdentity.close();
       window.location.href = "index.html";
     });
     netlifyIdentity.init();

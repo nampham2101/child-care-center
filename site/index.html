@@ -137,6 +137,7 @@
       netlifyIdentity.on("init", function (user) {
         if (!user) {
           netlifyIdentity.on("login", function () {
+            netlifyIdentity.close();
             window.location.href = "admin/index.html";
           });
         }
