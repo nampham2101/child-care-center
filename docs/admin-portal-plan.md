@@ -10,12 +10,17 @@ one depends on the stage before it.
 **Goal:** accounts and config exist for later stages to build on. These steps happen
 in Netlify's/Supabase's own dashboards and can't be done by Claude directly.
 
-- [ ] Create (or connect) a Netlify site for this repo
-- [ ] Create a Supabase project (free tier)
-- [ ] Set Netlify environment variables for the Supabase URL and service key (never
+- [x] Create (or connect) a Netlify site for this repo
+- [x] Create a Supabase project (free tier)
+- [x] Set Netlify environment variables for the Supabase URL and service key (never
       committed to the repo, never sent to the browser)
-- [ ] Enable Netlify Identity on the site
-- [ ] Invite yourself as the sole admin account (registration closed to the public)
+- [x] Enable Netlify Identity on the site
+- [x] Invite yourself as the sole admin account (registration closed to the public)
+
+**Note:** the env vars were actually created as `MY_SUPABASE_URL` and
+`MY_SUPABASE_SERVICE_ROLE_KEY` (custom prefix, not the plain names). Stage 3's
+functions must read `process.env.MY_SUPABASE_URL` / `process.env.MY_SUPABASE_SERVICE_ROLE_KEY`
+to match.
 
 ## Stage 1 — Supabase schema
 
