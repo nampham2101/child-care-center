@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="identity.netlify.com" href="https://child-carecenter.netlify.app/.netlify/identity">
 </head>
 <body>
   <header class="site-header">
@@ -126,5 +127,22 @@
   </footer>
 
   <script src="nav.js"></script>
+
+  <!-- Handles invite/password-recovery links from Netlify Identity, which
+       point at the homepage by default. Ordinary visitors never see the
+       widget UI — it only opens if the URL carries an invite/recovery token. -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script>
+    if (window.netlifyIdentity) {
+      netlifyIdentity.on("init", function (user) {
+        if (!user) {
+          netlifyIdentity.on("login", function () {
+            window.location.href = "admin/index.html";
+          });
+        }
+      });
+      netlifyIdentity.init();
+    }
+  </script>
 </body>
 </html>
