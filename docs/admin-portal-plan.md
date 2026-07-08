@@ -33,11 +33,10 @@ to match.
       console
 
 **Note:** project is `sunny-child-care-center` (id `efamdmirterdenalxfkv`, region
-`ap-south-1`). RLS is currently disabled on `entries` — acceptable since only
-Netlify Functions (via the `service_role` key) touch this table, but flagged by
-Supabase's advisor since the table is technically reachable via the public REST
-API by anyone with the `anon` key. Pending decision: run
-`ALTER TABLE public.entries ENABLE ROW LEVEL SECURITY;` to close that off.
+`ap-south-1`). RLS is now enabled on `entries` with zero policies (deny-by-default
+for `anon`/`authenticated`); only Netlify Functions using the `service_role` key
+(which bypasses RLS) can read/write. Supabase's advisor confirms this is the
+expected "RLS enabled, no policy" state, not an error.
 
 ## Stage 2 — Netlify Identity gate
 
