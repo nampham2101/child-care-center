@@ -31,9 +31,10 @@ export function getUser(context) {
   return (context.clientContext && context.clientContext.user) || null;
 }
 
-export function json(status, body) {
-  return new Response(JSON.stringify(body), {
-    status,
+export function json(statusCode, body) {
+  return {
+    statusCode,
     headers: { "Content-Type": "application/json" },
-  });
+    body: JSON.stringify(body),
+  };
 }

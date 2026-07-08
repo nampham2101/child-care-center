@@ -1,19 +1,20 @@
 import { getSupabase, getUser, json } from "./lib/helpers.mjs";
 
 // Fetch entries, optionally filtered by category and/or date range. Auth-checked:
-// requires a valid Netlify Identity session.
-export default async (req, context) => {
-  if (req.method !== "GET") {
+// requires a valid Netlify Identity session. Uses the v1 handler signature because
+// Netlify only populates context.clientContext.user for handler-style functions.
+export const handler = async (event, context) => {
+  if (event.httpMethod !== "GET") {
     return json(405, { error: "Method not allowed" });
   }
   if (!getUser(context)) {
     return json(401, { error: "Not authenticated" });
   }
 
-  const params = new URL(req.url).searchParams;
-  const category = params.get("category");
-  const from = params.get("from"); // inclusive start date (YYYY-MM-DD)
-  const to = params.get("to"); // inclusive end date (YYYY-MM-DD)
+  const params = event.queryStringParameters || {};
+  const category = params.category;
+  const from = params.from; // inclusive start date (YYYY-MM-DD)
+  const to = params.to; // inclusive end date (YYYY-MM-DD)
 
   try {
     const supabase = getSupabase();
@@ -35,8 +36,4 @@ export default async (req, context) => {
   } catch (err) {
     return json(500, { error: err.message });
   }
-};
-
-export const config = {
-  path: "/api/get-entries",
 };

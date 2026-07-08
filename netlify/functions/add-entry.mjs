@@ -1,9 +1,10 @@
 import { getSupabase, getUser, json } from "./lib/helpers.mjs";
 
 // Insert one income/expense record. Auth-checked: requires a valid Netlify
-// Identity session.
-export default async (req, context) => {
-  if (req.method !== "POST") {
+// Identity session. Uses the v1 handler signature because Netlify only populates
+// context.clientContext.user (the Identity JWT check) for handler-style functions.
+export const handler = async (event, context) => {
+  if (event.httpMethod !== "POST") {
     return json(405, { error: "Method not allowed" });
   }
   if (!getUser(context)) {
@@ -12,7 +13,7 @@ export default async (req, context) => {
 
   let payload;
   try {
-    payload = await req.json();
+    payload = JSON.parse(event.body || "{}");
   } catch {
     return json(400, { error: "Invalid JSON body" });
   }
@@ -54,8 +55,4 @@ export default async (req, context) => {
   } catch (err) {
     return json(500, { error: err.message });
   }
-};
-
-export const config = {
-  path: "/api/add-entry",
 };
