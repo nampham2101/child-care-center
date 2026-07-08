@@ -61,14 +61,19 @@ listeners. The Identity widget is pointed at the real site
 rel="identity.netlify.com">` tag in each page's `<head>`, so it resolves
 correctly even when testing from `localhost`.
 
-**Verification caveat:** the code follows Netlify's documented widget pattern
-(`on('init')` / `on('login')` / `on('logout')` + `init()`) exactly, and the pages
-render correctly with no console errors. However, the actual login round-trip
-(redirect-when-logged-out → widget login → redirect-to-dashboard) could **not**
-be confirmed in the sandboxed local preview browser — cross-origin cookies/iframes
-behave differently in headless automation than in a real browser. This needs a
-real click-through in an actual browser once deployed, which is Stage 6's job;
-don't treat Stage 2 as fully proven until that happens.
+**Verified end-to-end** on the live site (`child-carecenter.netlify.app`) in a
+real Chrome browser: logged-out visit to `admin/index.html` redirects to
+`admin/login.html`; logging in via the widget redirects to the dashboard;
+session persists across `admin/index.html` and `admin/records.html` with no
+re-login; Log Out redirects back to the login page. (The sandboxed local
+preview browser couldn't confirm this — cross-origin cookies/iframes behave
+differently in headless automation — but a real browser confirms it works.)
+
+Also discovered and fixed along the way: Netlify's invite/password-recovery
+emails link to the site's homepage by default, so `site/index.html` now loads
+the Identity widget too (inert for ordinary visitors, only activates for
+invite/recovery tokens in the URL) — otherwise clicking the invite email would
+land on a page with no way to complete signup.
 
 ## Stage 3 — Netlify Functions
 
