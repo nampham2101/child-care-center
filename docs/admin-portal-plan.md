@@ -81,12 +81,42 @@ land on a page with no way to complete signup.
 never reaches the browser.
 **Depends on:** Stage 1 (schema exists), Stage 2 (Identity sessions to check against).
 
-- [ ] `netlify/functions/add-entry.js` — insert one income/expense record; rejects
+- [x] `netlify/functions/add-entry.mjs` — insert one income/expense record; rejects
       requests without a valid Identity session
-- [ ] `netlify/functions/get-entries.js` — fetch entries, optionally filtered by
+- [x] `netlify/functions/get-entries.mjs` — fetch entries, optionally filtered by
       category/date range; same auth check
-- [ ] Add `@netlify/functions` and `@supabase/supabase-js` as real dependencies in
-      `package.json` (currently a placeholder with none)
+- [x] Add `@supabase/supabase-js` as a real dependency in `package.json` (see note
+      on `@netlify/functions` below)
+
+**Endpoints (default paths):** `/.netlify/functions/add-entry` (POST) and
+`/.netlify/functions/get-entries` (GET, optional `?category=&from=&to=`). Shared
+Supabase-client / auth / JSON-response helpers live in
+`netlify/functions/lib/helpers.mjs`.
+
+**Key implementation notes / gotchas hit during Stage 3:**
+- **Function format matters for auth.** The functions MUST use the v1 handler
+  signature (`export const handler = async (event, context)`), not the modern v2
+  `export default` format. Netlify only populates `context.clientContext.user`
+  (the validated Identity JWT → the whole auth gate) for handler-style functions.
+  With v2 `export default`, `clientContext` is absent and every request 401s.
+- **`@netlify/functions` was NOT added.** It only provides TypeScript types, and
+  these functions are plain-JS ESM (`.mjs`) — an unused dep. Add it only if these
+  are ever converted to TypeScript.
+- **Env var values were wrong at first.** `MY_SUPABASE_SERVICE_ROLE_KEY` had a
+  20-char non-key value and `MY_SUPABASE_URL` had extra characters; Supabase
+  returned "Invalid API key" until corrected to the real `service_role` secret and
+  the bare `https://efamdmirterdenalxfkv.supabase.co`. Env-var changes only take
+  effect on a redeploy. Functions read them via `Netlify.env.get(...)`.
+- **Auth is cookie-or-header.** A logged-in browser sends the `nf_jwt` cookie, so
+  same-origin `fetch` calls authenticate even without a manual `Authorization`
+  header. Stage 4/5 can rely on that, but explicitly sending
+  `Authorization: Bearer <netlifyIdentity.currentUser().jwt()>` also works.
+
+**Verified end-to-end on the live site:** authenticated insert → 201 with the row;
+read-back → 200 with the entry; validation rejects bad `type` / negative `amount`
+(400) and wrong method (405); category/date-range filters return correct rows;
+truly unauthenticated requests (curl, no cookie) → 401 for both functions. Test
+row was cleaned up afterward, so the `entries` table is empty going into Stage 4.
 
 ## Stage 4 — Dashboard UI (`site/admin/index.html`)
 
