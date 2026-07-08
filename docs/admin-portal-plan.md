@@ -27,10 +27,17 @@ to match.
 **Goal:** a table to store income/expense entries.
 **Depends on:** Stage 0 (Supabase project exists).
 
-- [ ] Create an `entries` table with columns: `id`, `type` (`income`/`expense`),
+- [x] Create an `entries` table with columns: `id`, `type` (`income`/`expense`),
       `amount`, `category`, `date`, `note` (nullable), `created_at`
-- [ ] Confirm the table is reachable from the Supabase dashboard's table editor / SQL
+- [x] Confirm the table is reachable from the Supabase dashboard's table editor / SQL
       console
+
+**Note:** project is `sunny-child-care-center` (id `efamdmirterdenalxfkv`, region
+`ap-south-1`). RLS is currently disabled on `entries` — acceptable since only
+Netlify Functions (via the `service_role` key) touch this table, but flagged by
+Supabase's advisor since the table is technically reachable via the public REST
+API by anyone with the `anon` key. Pending decision: run
+`ALTER TABLE public.entries ENABLE ROW LEVEL SECURITY;` to close that off.
 
 ## Stage 2 — Netlify Identity gate
 
