@@ -4,6 +4,26 @@ import { getSupabase, getUser, json } from "./lib/helpers.mjs";
 // requires a valid Netlify Identity session. Uses the v1 handler signature because
 // Netlify only populates context.clientContext.user for handler-style functions.
 export const handler = async (event, context) => {
+  // TEMP DIAGNOSTIC — remove after debugging. Reports what the function sees
+  // without leaking secrets or real user data.
+  if (event.queryStringParameters && event.queryStringParameters.debug === "1") {
+    const cc = context.clientContext || null;
+    const url = (typeof Netlify !== "undefined" && Netlify.env ? Netlify.env.get("MY_SUPABASE_URL") : process.env.MY_SUPABASE_URL) || "";
+    const key = (typeof Netlify !== "undefined" && Netlify.env ? Netlify.env.get("MY_SUPABASE_SERVICE_ROLE_KEY") : process.env.MY_SUPABASE_SERVICE_ROLE_KEY) || "";
+    return json(200, {
+      clientContextKeys: cc ? Object.keys(cc) : null,
+      hasUser: !!(cc && cc.user),
+      userType: typeof (cc && cc.user),
+      urlLen: url.length,
+      urlHost: url.replace(/^https?:\/\//, "").split(".")[0],
+      keyLen: key.length,
+      keyIsJWT: key.startsWith("eyJ"),
+      keyIsSbSecret: key.startsWith("sb_secret"),
+      keyIsSbPublishable: key.startsWith("sb_publishable"),
+      keyIsAnonLike: key.startsWith("sb_") ? "sb-format" : "other",
+    });
+  }
+
   if (event.httpMethod !== "GET") {
     return json(405, { error: "Method not allowed" });
   }
