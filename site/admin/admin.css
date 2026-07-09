@@ -100,6 +100,76 @@
   font-weight: 700;
 }
 
+/* Records filter + table */
+
+.filter-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1.25rem;
+  align-items: end;
+}
+
+.filter-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.records-summary {
+  margin: 1.75rem 0 1rem;
+  font-weight: 700;
+  color: var(--color-text-light);
+}
+
+.table-card {
+  overflow-x: auto;
+  padding: 0.5rem;
+}
+
+.records-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.records-table th,
+.records-table td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-cream-dark);
+  white-space: nowrap;
+}
+
+.records-table th {
+  font-family: var(--font-heading);
+  color: var(--color-primary-dark);
+}
+
+.records-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.records-table td.num,
+.records-table th.num {
+  text-align: right;
+}
+
+.records-table .type-income {
+  color: var(--color-secondary-dark);
+  font-weight: 700;
+}
+
+.records-table .type-expense {
+  color: var(--color-primary-dark);
+  font-weight: 700;
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--color-text-light);
+  padding: 1.5rem;
+}
+
 .login-wrap {
   min-height: 100vh;
   display: flex;

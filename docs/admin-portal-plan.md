@@ -161,9 +161,25 @@ None of `netlify login`/`link`/`dev` consume build/bandwidth/function quota.
 **Goal:** the admin can review and filter past entries.
 **Depends on:** Stage 3 (functions to call).
 
-- [ ] List entries fetched from `get-entries`
-- [ ] Filter by category
-- [ ] Filter by date range (e.g. this month, custom range)
+- [x] List entries fetched from `get-entries`
+- [x] Filter by category
+- [x] Filter by date range (e.g. this month, custom range)
+
+**Files:** markup in `site/admin/records.html`; logic in `site/admin/records.js`
+(reuses `admin-api.js`). A filter bar (category `<datalist>` + From/To dates, with
+**This Month** and **Clear** shortcuts) drives `get-entries`; results render into a
+color-coded table (Date, Type, Category, Amount, Note) sorted newest-first, above a
+live summary line (count + filtered income/expenses/profit). Table cells are built
+with `textContent` (no `innerHTML`) so entry text can't inject markup. Empty results
+show a "No entries found." state.
+
+**Tested locally via `netlify dev`** (same crafted-token method as Stage 4; no
+deploy consumed). Seeded 5 entries across two months/several categories, then
+verified in the preview browser: unfiltered list shows all 5 sorted by date with a
+correct summary; category filter (tuition → 2); **This Month** sets the July range
+and returns only the 3 July rows (June excluded); Clear resets to all 5 and empties
+the fields; a no-match filter shows the empty state with a zeroed summary. Test rows
+cleaned from Supabase afterward (table empty).
 
 ## Stage 6 — End-to-end verification
 

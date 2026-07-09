@@ -25,13 +25,59 @@
 
   <main class="container admin-main">
     <h1>Records</h1>
-    <div class="card placeholder-card">
-      <p>You're logged in. Listing entries with category and date-range filters will
-      be built in Stage 5 of the
-      <a href="https://github.com/nampham2101/child-care-center/blob/main/docs/admin-portal-plan.md">admin portal plan</a>.</p>
+
+    <section class="card" aria-labelledby="filter-heading">
+      <h2 id="filter-heading">Filter</h2>
+      <form id="filter-form" class="filter-bar">
+        <div class="form-field">
+          <label for="f-category">Category</label>
+          <input type="text" id="f-category" name="category" list="category-options" placeholder="All categories">
+          <datalist id="category-options">
+            <option value="tuition"></option>
+            <option value="supplies"></option>
+            <option value="payroll"></option>
+            <option value="utilities"></option>
+            <option value="food"></option>
+            <option value="maintenance"></option>
+          </datalist>
+        </div>
+        <div class="form-field">
+          <label for="f-from">From</label>
+          <input type="date" id="f-from" name="from">
+        </div>
+        <div class="form-field">
+          <label for="f-to">To</label>
+          <input type="date" id="f-to" name="to">
+        </div>
+        <div class="filter-actions">
+          <button type="submit" class="btn btn-primary">Apply</button>
+          <button type="button" class="btn btn-secondary" id="this-month">This Month</button>
+          <button type="button" class="btn btn-secondary" id="clear-filters">Clear</button>
+        </div>
+      </form>
+    </section>
+
+    <p id="records-summary" class="records-summary" role="status" aria-live="polite"></p>
+
+    <div class="card table-card">
+      <table class="records-table">
+        <thead>
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Type</th>
+            <th scope="col">Category</th>
+            <th scope="col" class="num">Amount</th>
+            <th scope="col">Note</th>
+          </tr>
+        </thead>
+        <tbody id="records-body"></tbody>
+      </table>
+      <p id="records-empty" class="empty-state" hidden>No entries found.</p>
     </div>
   </main>
 
   <script src="admin-auth.js"></script>
+  <script src="admin-api.js"></script>
+  <script src="records.js"></script>
 </body>
 </html>
