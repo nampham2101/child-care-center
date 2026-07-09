@@ -85,17 +85,37 @@
     }
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", wireForm);
-  } else {
-    wireForm();
+  // Only load totals once BOTH the DOM is wired and a session exists — the
+  // Identity "init" event can fire before or after DOMContentLoaded, so we gate
+  // on both rather than assuming an order.
+  var domReady = false;
+  var hasSession = false;
+
+  function maybeRefresh() {
+    if (domReady && hasSession) refreshTotals();
   }
 
-  // Load totals once Identity confirms a session (so a token is available).
+  function onDomReady() {
+    wireForm();
+    domReady = true;
+    // Covers the case where Identity already initialized before this ran.
+    if (window.netlifyIdentity && netlifyIdentity.currentUser()) hasSession = true;
+    maybeRefresh();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", onDomReady);
+  } else {
+    onDomReady();
+  }
+
   if (window.netlifyIdentity) {
     netlifyIdentity.on("init", function (user) {
-      if (user) refreshTotals();
+      if (user) { hasSession = true; maybeRefresh(); }
     });
-    netlifyIdentity.on("login", refreshTotals);
+    netlifyIdentity.on("login", function () {
+      hasSession = true;
+      maybeRefresh();
+    });
   }
 })();

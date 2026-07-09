@@ -181,6 +181,15 @@ and returns only the 3 July rows (June excluded); Clear resets to all 5 and empt
 the fields; a no-match filter shows the empty state with a zeroed summary. Test rows
 cleaned from Supabase afterward (table empty).
 
+**Post-deploy fix (both dashboard.js and records.js):** the initial on-load data
+load was gated only on the Identity `"init"` event, which on a returning (already
+logged-in) visit fires *before* `DOMContentLoaded` — so the load ran before the
+element refs were wired and silently no-op'd, leaving the dashboard totals blank.
+The local tests missed it because they triggered the load via a manual form
+submit/Apply rather than the on-load path. Fixed by gating the load on BOTH "DOM
+ready" and "session present" flags (whichever arrives last triggers it), plus a
+`currentUser()` check at DOM-ready to cover an init event that already fired.
+
 ## Stage 6 — End-to-end verification
 
 **Goal:** confirm the whole flow actually works, not just that the code compiles.

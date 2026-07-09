@@ -108,17 +108,37 @@
     document.getElementById("clear-filters").addEventListener("click", clearFilters);
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", wire);
-  } else {
-    wire();
+  // Only load once BOTH the DOM is wired and a session exists — the Identity
+  // "init" event can fire before or after DOMContentLoaded, so we gate on both
+  // rather than assuming an order.
+  var domReady = false;
+  var hasSession = false;
+
+  function maybeLoad() {
+    if (domReady && hasSession) load();
   }
 
-  // Load once Identity confirms a session (so a token is available).
+  function onDomReady() {
+    wire();
+    domReady = true;
+    // Covers the case where Identity already initialized before this ran.
+    if (window.netlifyIdentity && netlifyIdentity.currentUser()) hasSession = true;
+    maybeLoad();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", onDomReady);
+  } else {
+    onDomReady();
+  }
+
   if (window.netlifyIdentity) {
     netlifyIdentity.on("init", function (user) {
-      if (user) load();
+      if (user) { hasSession = true; maybeLoad(); }
     });
-    netlifyIdentity.on("login", load);
+    netlifyIdentity.on("login", function () {
+      hasSession = true;
+      maybeLoad();
+    });
   }
 })();
