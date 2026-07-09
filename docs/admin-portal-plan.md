@@ -123,10 +123,38 @@ row was cleaned up afterward, so the `entries` table is empty going into Stage 4
 **Goal:** the admin can add an entry and see where the center stands financially.
 **Depends on:** Stage 3 (functions to call).
 
-- [ ] Form to add an income or expense entry (amount, category, date, optional note),
+- [x] Form to add an income or expense entry (amount, category, date, optional note),
       calling `add-entry`
-- [ ] Running totals: total income, total expenses, profit (income − expenses), from
+- [x] Running totals: total income, total expenses, profit (income − expenses), from
       `get-entries`
+
+**Files:** the dashboard markup lives in `site/admin/index.html`; logic in
+`site/admin/dashboard.js`; a shared function client in `site/admin/admin-api.js`
+(reused by Stage 5). The client always sends `Authorization: Bearer
+<currentUser().jwt()>` so it works identically on the deployed site and under
+`netlify dev`. Category field is a free-text input with a `<datalist>` of common
+suggestions (tuition, supplies, payroll, utilities, food, maintenance), matching
+CLAUDE.md's "editable list, not a fixed enum."
+
+**Tested locally via `netlify dev` (no Netlify deploy consumed):**
+- Ran the linked site locally with `netlify dev` (env vars pulled from the linked
+  Netlify project). `netlify dev` decodes a JWT's payload without verifying the
+  signature, so a locally-crafted Identity token authenticates against the local
+  functions — enabling a full automated test without a real login round-trip.
+- Backend through the local server (curl): unauthenticated → 401; authenticated
+  insert (income + expense) → 201; read-back and category/date filters correct.
+- Dashboard UI in a browser: renders correctly (totals cards + add-entry form);
+  submitting the form inserts the entry and refreshes the totals to the right
+  figures (e.g. income $1,000.00, expenses $350.00, profit $650.00 in green/coral);
+  form resets and date defaults to today; the error branch shows a red status
+  message when a call fails. All test rows were cleaned from Supabase afterward
+  (table empty going into Stage 5).
+
+**Local-dev setup notes:** `netlify login` + `netlify link --id <site-id>` links
+this repo to the Netlify project; `.claude/launch.json` has a `netlify-dev` config
+so the preview tooling can run it on port 8888. The real-Chrome automation blocks
+`localhost`/`127.0.0.1`, so local browser testing uses the preview browser instead.
+None of `netlify login`/`link`/`dev` consume build/bandwidth/function quota.
 
 ## Stage 5 — Records UI (`site/admin/records.html`)
 

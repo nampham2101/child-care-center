@@ -48,6 +48,58 @@
   color: var(--color-text-light);
 }
 
+/* Running totals */
+
+.totals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.total-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-align: center;
+}
+
+.total-label {
+  font-weight: 700;
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+}
+
+.total-value {
+  font-family: var(--font-heading);
+  font-size: 1.9rem;
+  color: var(--color-text);
+}
+
+.total-income .total-value {
+  color: var(--color-secondary-dark);
+}
+
+.total-expense .total-value {
+  color: var(--color-primary-dark);
+}
+
+.total-profit .total-value.is-negative {
+  color: var(--color-primary-dark);
+}
+
+/* Form status messages */
+
+.status-ok {
+  color: var(--color-secondary-dark);
+  font-weight: 700;
+}
+
+.status-error {
+  color: var(--color-primary-dark);
+  font-weight: 700;
+}
+
 .login-wrap {
   min-height: 100vh;
   display: flex;
