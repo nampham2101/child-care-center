@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "description": "Sunny Days Child Care Center — marketing site and (future) admin portal",
+  "scripts": {
+    "dev": "netlify dev",
+    "serve": "npx serve site"
+  },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.1"
   }

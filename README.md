@@ -1,39 +1,74 @@
 # Sunny Days Child Care Center
 
-Marketing website and (future) staff admin portal for a child care center.
-See [CLAUDE.md](CLAUDE.md) for the full project spec.
+Marketing website + a login-protected staff admin portal for tracking income and
+expenses. See [CLAUDE.md](CLAUDE.md) for the full project spec and
+[docs/admin-portal-plan.md](docs/admin-portal-plan.md) for the staged build plan.
 
-All content (center name, address, phone, staff, tuition figures) is **placeholder** —
+All center content (name, address, phone, staff, tuition figures) is **placeholder** —
 swap in real content when available.
 
 ## What's here
 
-- **Marketing site** (this pass): `site/index.html`, `site/about.html`,
-  `site/programs.html`, `site/tuition.html`, `site/contact.html`, `site/styles.css`,
-  `site/nav.js`. Plain HTML/CSS/JS, no build step — open any `.html` file directly in a
-  browser, or serve the `site/` folder with any static file server (e.g. `npx serve site`,
-  `python3 -m http.server --directory site`).
-- `netlify.toml` — declares the publish directory (`site`) and the future Netlify
-  Functions directory (`netlify/functions`). Inert until the admin portal is built.
-- `package.json` — minimal scaffold; dependencies will be added once Netlify Functions code
-  actually needs them.
-- [`docs/admin-portal-plan.md`](docs/admin-portal-plan.md) — staged, checkable plan for
-  building the admin portal described below.
+- **Marketing site** — `site/index.html`, `site/about.html`, `site/programs.html`,
+  `site/tuition.html`, `site/contact.html`, plus shared `site/styles.css` and
+  `site/nav.js`. Plain HTML/CSS/vanilla JS, no build step.
+- **Admin portal** — `site/admin/` (`login.html`, `index.html` dashboard,
+  `records.html`). Uses Netlify Identity for auth; the dashboard adds entries and shows
+  running totals; records lists/filters entries. Shared client in `site/admin/admin-api.js`.
+- **Netlify Functions** — `netlify/functions/add-entry.mjs` and `get-entries.mjs`
+  (auth-checked), talking to Supabase via the service-role key (server-side only).
+- `netlify.toml` (publish dir `site`, functions dir `netlify/functions`), `package.json`,
+  and `docs/`.
 
-## Not yet implemented
+## Running locally
 
-- `site/admin/` portal (login, dashboard, records pages) — the footer's "Staff Login"
-  link points at `admin/login.html` (relative to the `site/` pages), which doesn't exist
-  yet, so it currently 404s.
-- Netlify Identity authentication.
-- Netlify Functions (`add-entry`, `get-entries`) and Supabase-backed income/expense storage.
-- Live wiring of the contact form to Netlify Forms (fields already use clean `name`
-  attributes so this is a drop-in change later).
-- Edit/delete for financial entries, reporting/export.
+### Full app (marketing site + admin portal + functions)
 
-## Deployment (planned)
+The admin portal needs the Netlify Functions running, so use the Netlify CLI — it serves
+the site, runs the functions, and injects the Supabase env vars from the linked Netlify
+project (no local secrets needed).
 
-Target host is Netlify. The marketing pages deploy as static files with zero config;
-the admin portal (once built) will use Netlify Functions + Identity, scoped to
-`/site/admin` and `/netlify/functions` per CLAUDE.md. Supabase URL/keys will be Netlify
-environment variables — never committed to this repo or sent to the browser.
+One-time setup:
+
+```bash
+npm install                 # installs @supabase/supabase-js
+npm i -g netlify-cli        # the Netlify CLI (if you don't have it)
+netlify login               # opens the browser to authorize
+netlify link                # link this repo to the Netlify site (child-carecenter)
+```
+
+Then, any time:
+
+```bash
+npm run dev                 # -> http://localhost:8888
+```
+
+Open `http://localhost:8888`, go to the admin portal via the footer "Staff Login" link,
+and sign in with your Netlify Identity account. Data reads/writes hit the real Supabase
+project (the same data the deployed site uses).
+
+### Marketing pages only (no functions/auth needed)
+
+For quick work on just the public pages, skip the CLI entirely:
+
+```bash
+npm run serve               # static server for site/  (or just open site/index.html)
+```
+
+The admin pages won't function this way (no Functions/Identity), but every marketing page
+works.
+
+## Deployment
+
+Hosted on Netlify, auto-deploying on every push to `main`. Marketing pages ship as static
+files; the admin portal runs on Netlify Functions + Identity. The Supabase URL and
+service-role key live as Netlify environment variables — never committed to the repo and
+never sent to the browser.
+
+## Backlog (not built yet)
+
+- Edit/delete for existing entries.
+- Reporting/export (e.g. CSV, monthly summary).
+- Support for more than one admin account.
+- Wiring the contact form to Netlify Forms (field `name` attributes are already clean, so
+  it's a drop-in change).
